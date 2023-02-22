@@ -18,41 +18,65 @@ int main()
 {
     string riga;
     string parola;
-    int numeroRigaParolaTrovata = 0;
+    string versetti;
+    int numeroVerso = 0;
 
-    while (parola != "exit")
+    while (parola != "exit") // WHILE la parola è diversa da "exit"
     {
         cout << "Inserisci la parola che vuoi trovare. \n";
         cin >> parola;
-
         ifstream fileInput("maggio.txt");
+        versetti = "";
+        numeroVerso = 0;
 
-        while (getline(fileInput, riga))
+        while (getline(fileInput, riga)) // Leggi tutte le righe
         {
-            numeroRigaParolaTrovata++;
-            bool flag = false; // SE TROVO LA PAROLA IMPOSTO A TRUE
+            numeroVerso++;
 
-            for (int i = 0; i < riga.length(); i++) // for tutta riga
+            if (riga != "")
             {
-                for (int j = 0; j < parola.length(); j++) // for tutta parola
+                versetti += to_string(numeroVerso) + " - " + riga + "\n";
+            }
+            else
+            {
+                versetti = "";
+            }
+
+            bool trovata = false; // SE TROVO LA PAROLA IMPOSTO A TRUE
+
+            for (int i = 0; i < riga.length(); i++) // FOR tutta riga
+            {
+                for (int j = 0; j < parola.length(); j++) // FOR tutta parola
                 {
-                    if (riga[i] == parola[j]) // se le lettere sono uguali
+                    if (riga[i] == parola[j]) // IF le lettere sono uguali
                     {
-                        if (j == parola.length() - 1) // se le lettere sono uguali e sono all'ultima lettera della parola
+                        if (j == parola.length() -1 ) // IF le lettere sono uguali e sono all'ultima lettera della parola
                         {
-                            flag = true; // PAROLA TROVATA
+                            trovata = true; // PAROLA TROVATA
+                            cout << "La parola si trova al verso: " << numeroVerso << "\n";
+
+                            while (getline(fileInput, riga))
+                            {
+                                numeroVerso++;
+
+                                if (riga == "")
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    versetti += to_string(numeroVerso) + " - " + riga + "\n";
+                                }
+                            }
+                            cout << versetti << "\n";
                         }
                         i++;
                     }
                     else
                     {
-                        break;
+                        break; // Smette di controllare
                     }
                 }
-            }
-            if (flag == true)
-            {
-                cout << "La parola si trova alla riga: " << numeroRigaParolaTrovata << "\n";
             }
         }
         fileInput.close();
